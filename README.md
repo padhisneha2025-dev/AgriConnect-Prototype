@@ -38,7 +38,7 @@ On top of that, we added ML-based price forecasting, a buyer-matching system, an
 Clone the repo:
  
 ```bash
-git clone https://github.com/your-username/agriconnect.git
+git clone https://github.com/padhisneha2025-dev/AgriConnect-Prototype.git
 cd agriconnect
 ```
  
