@@ -1,0 +1,1419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AgriConnect · Smart Market Linkage</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<!-- QR Code Library -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<style>
+  :root{
+    --green-950:#063a26;
+    --green-800:#0e7c4d;
+    --green-700:#128a56;
+    --green-600:#17a465;
+    --green-500:#22b876;
+    --mint-50:#eafcf3;
+    --mint-100:#d7f7e6;
+    --ink:#0f2419;
+    --ink-soft:#33463c;
+    --muted:#68786f;
+    --border:#e1e8e2;
+    --bg:#f5f8f6;
+    --card:#ffffff;
+    --amber:#d98a17;
+    --amber-bg:#fdf2e0;
+    --blue:#1b7fd1;
+    --blue-bg:#e6f2fc;
+    --red:#c0442e;
+    --radius-lg:18px;
+    --radius-md:12px;
+    --radius-sm:8px;
+    --shadow: 0 1px 2px rgba(15,36,25,.04), 0 8px 24px -12px rgba(15,36,25,.10);
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;font-family:'Inter',sans-serif;background:var(--bg);color:var(--ink);}
+  h1,h2,h3,.logo-text,.brand-font{font-family:'Poppins',sans-serif;}
+  button{font-family:inherit;}
+  ::selection{background:var(--mint-100);}
+
+  /* ---------- Header ---------- */
+  header.app-header{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:14px 28px;background:#fff;border-bottom:1px solid var(--border);
+    gap:16px;flex-wrap:wrap;
+  }
+  .brand{display:flex;align-items:center;gap:12px;}
+  .brand-icon{
+    width:42px;height:42px;border-radius:12px;
+    background:linear-gradient(155deg,var(--green-700),var(--green-950));
+    display:flex;align-items:center;justify-content:center;color:#fff;font-size:20px;flex:none;
+  }
+  .brand-title-row{display:flex;align-items:center;gap:9px;flex-wrap:wrap;}
+  .brand-title-row .logo-text{font-size:19px;font-weight:700;color:var(--green-950);}
+  .badge-pill{
+    font-size:11px;font-weight:600;color:var(--green-800);background:var(--mint-100);
+    padding:3px 10px;border-radius:999px;letter-spacing:.2px;
+  }
+  .brand-sub{font-size:12px;color:var(--muted);margin-top:1px;}
+  .header-right{display:flex;align-items:center;gap:14px;}
+  .lang-pick{
+    display:flex;align-items:center;gap:6px;font-size:13px;color:var(--ink-soft);
+    border:1px solid var(--border);padding:7px 12px;border-radius:10px;background:#fff;
+  }
+  .user-chip{display:flex;align-items:center;gap:10px;}
+  .avatar{
+    width:38px;height:38px;border-radius:50%;background:var(--green-950);color:#fff;
+    display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;
+    font-family:'Poppins',sans-serif;position:relative;flex:none;
+  }
+  .avatar::after{
+    content:'';position:absolute;bottom:-1px;right:-1px;width:11px;height:11px;border-radius:50%;
+    background:var(--green-600);border:2px solid #fff;
+  }
+  .user-name{font-size:13.5px;font-weight:600;color:var(--ink);line-height:1.25;}
+  .user-role{font-size:11.5px;color:var(--muted);line-height:1.25;}
+
+  /* ---------- Shell ---------- */
+  .shell{display:flex;align-items:flex-start;gap:22px;padding:22px 28px 60px;max-width:1500px;margin:0 auto;}
+  aside.sidebar{
+    width:320px;flex:none;background:var(--card);border:1px solid var(--border);
+    border-radius:var(--radius-lg);padding:18px;box-shadow:var(--shadow);
+    display:flex;flex-direction:column;gap:16px;position:sticky;top:22px;
+  }
+  .field label{
+    display:flex;align-items:center;gap:7px;font-size:12.5px;font-weight:600;
+    color:var(--ink-soft);margin-bottom:7px;
+  }
+  .field label .ico{font-size:13px;}
+  .field input, .field select{
+    width:100%;padding:11px 12px;border:1px solid var(--border);border-radius:10px;
+    font-size:13.5px;color:var(--ink);background:#fbfcfb;font-family:inherit;
+  }
+  .field input:focus, .field select:focus{outline:2px solid var(--green-500);outline-offset:1px;}
+  .range-row{display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-top:6px;}
+  input[type=range]{
+    -webkit-appearance:none;width:100%;height:6px;border-radius:999px;
+    background:linear-gradient(to right,var(--green-600) var(--fill,50%), #e3ece6 var(--fill,50%));
+  }
+  input[type=range]::-webkit-slider-thumb{
+    -webkit-appearance:none;width:18px;height:18px;border-radius:50%;background:#fff;
+    border:3px solid var(--green-700);cursor:pointer;box-shadow:0 1px 4px rgba(0,0,0,.2);
+  }
+  .qty-value{font-weight:400;color:var(--muted);}
+
+  .lot-card{
+    background:var(--mint-50);border:1px solid var(--mint-100);border-radius:var(--radius-md);
+    padding:14px;
+  }
+  .lot-label{font-size:11px;letter-spacing:.3px;color:var(--green-800);font-weight:700;margin-bottom:6px;}
+  .lot-row{display:flex;align-items:center;justify-content:space-between;gap:10px;}
+  .lot-id{font-size:17px;font-weight:700;color:var(--green-950);font-family:'Poppins',sans-serif;}
+  .qr{
+    width:62px;height:62px;border-radius:6px;flex:none;
+    display:flex;align-items:center;justify-content:center;
+    background-color:#fff;border:1px solid #dfe6e1;
+    position:relative;
+  }
+  .status-tag{
+    margin-top:10px;display:inline-flex;align-items:center;gap:6px;font-size:11.5px;font-weight:600;
+    color:#fff;background:var(--green-700);padding:5px 10px;border-radius:999px;
+  }
+  .status-tag .dot{width:6px;height:6px;border-radius:50%;background:#bdf5d6;}
+  .lot-meta{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px;font-size:12px;}
+  .lot-meta .k{color:var(--muted);text-transform:uppercase;font-size:10px;letter-spacing:.4px;margin-bottom:2px;}
+  .lot-meta .v{font-weight:600;color:var(--ink);}
+
+  /* ---------- Main / tabs ---------- */
+  main.panel{flex:1;min-width:0;display:flex;flex-direction:column;gap:18px;}
+  .tabbar{
+    display:flex;gap:4px;background:#fff;border:1px solid var(--border);border-radius:14px;
+    padding:5px;box-shadow:var(--shadow);width:max-content;max-width:100%;overflow-x:auto;
+  }
+  .tabbar button{
+    border:none;background:transparent;padding:10px 16px;border-radius:10px;font-size:13.5px;
+    font-weight:600;color:var(--muted);cursor:pointer;display:flex;align-items:center;gap:7px;
+    white-space:nowrap;transition:background .15s,color .15s;
+  }
+  .tabbar button.active{background:var(--green-950);color:#fff;}
+  .tabbar button:not(.active):hover{background:var(--mint-50);color:var(--green-800);}
+
+  .tab-view{display:none;flex-direction:column;gap:18px;}
+  .tab-view.active{display:flex;}
+
+  .stat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+  .stat-card{
+    background:#fff;border:1px solid var(--border);border-radius:var(--radius-lg);padding:18px;
+    box-shadow:var(--shadow);display:flex;flex-direction:column;gap:10px;
+  }
+  .stat-top{display:flex;align-items:flex-start;justify-content:space-between;}
+  .stat-icon{
+    width:42px;height:42px;border-radius:12px;display:flex;align-items:center;justify-content:center;
+    font-size:19px;color:#fff;flex:none;
+  }
+  .stat-tag{font-size:11px;font-weight:600;padding:4px 9px;border-radius:999px;white-space:nowrap;}
+  .stat-label{font-size:12.5px;color:var(--muted);font-weight:500;}
+  .stat-value{font-size:24px;font-weight:700;font-family:'Poppins',sans-serif;color:var(--ink);}
+
+  .card{
+    background:#fff;border:1px solid var(--border);border-radius:var(--radius-lg);
+    box-shadow:var(--shadow);overflow:hidden;
+  }
+  .card-head{
+    display:flex;align-items:center;justify-content:space-between;padding:18px 20px 4px;flex-wrap:wrap;gap:10px;
+  }
+  .card-title{font-size:16px;font-weight:700;display:flex;align-items:center;gap:9px;}
+  .live-tag{font-size:11px;font-weight:600;color:var(--green-800);background:var(--mint-100);padding:4px 10px;border-radius:999px;}
+
+  table.nrv-table{width:100%;border-collapse:collapse;margin-top:12px;font-size:13.5px;}
+  table.nrv-table th{
+    text-align:left;font-size:10.5px;letter-spacing:.4px;color:var(--muted);font-weight:700;
+    padding:10px 20px;border-bottom:1px solid var(--border);text-transform:uppercase;
+  }
+  table.nrv-table td{padding:16px 20px;border-bottom:1px solid var(--border);vertical-align:middle;}
+  table.nrv-table tr:last-child td{border-bottom:none;}
+  table.nrv-table tr.recommended{background:var(--mint-50);}
+  .mandi-name{font-weight:700;color:var(--ink);}
+  .rec-badge{
+    display:inline-flex;align-items:center;gap:5px;font-size:10.5px;font-weight:700;color:#fff;
+    background:var(--green-700);padding:4px 9px;border-radius:999px;margin-left:8px;
+  }
+  .neg{color:var(--red);}
+  .pos{color:var(--green-700);font-weight:700;}
+  .cess-sub{font-size:11px;color:var(--red);display:block;}
+  .btn-select{
+    border:1px solid var(--border);background:#fff;padding:9px 14px;border-radius:9px;font-size:12.5px;
+    font-weight:600;color:var(--ink-soft);cursor:pointer;white-space:nowrap;
+  }
+  .btn-select.best{background:var(--green-700);border-color:var(--green-700);color:#fff;display:flex;gap:6px;align-items:center;}
+  .btn-select:hover{filter:brightness(0.97);}
+
+  /* forecast */
+  .ai-signal{
+    background:linear-gradient(135deg,var(--mint-50),var(--mint-100));border:1px solid var(--mint-100);
+    border-radius:var(--radius-lg);padding:18px 20px; transition: all 0.3s;
+  }
+  .ai-signal-top{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:8px;}
+  .ai-signal-icon{
+    width:34px;height:34px;border-radius:10px;background:var(--green-700);color:#fff;
+    display:flex;align-items:center;justify-content:center;font-size:16px; transition: all 0.3s;
+  }
+  .ai-signal-title{font-size:16px;font-weight:700;color:var(--green-950);font-family:'Poppins',sans-serif;}
+  .confidence-tag{font-size:11px;font-weight:700;color:var(--green-800);background:#fff;padding:4px 10px;border-radius:999px;}
+  
+  .chart-wrap{padding:6px 20px 18px;}
+  .chart-legend{display:flex;gap:20px;padding:0 20px 16px;font-size:12px;color:var(--muted);flex-wrap:wrap;}
+  .legend-item{display:flex;align-items:center;gap:6px;}
+  .legend-swatch{width:16px;height:3px;border-radius:2px;}
+  .legend-dot{width:9px;height:9px;border-radius:2px;}
+
+  .forecast-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+
+  /* buyers */
+  .pill-row{display:flex;gap:8px;flex-wrap:wrap;}
+  .pill{
+    border:1px solid var(--border);background:#fff;padding:8px 14px;border-radius:999px;font-size:12.5px;
+    font-weight:600;color:var(--ink-soft);cursor:pointer;
+  }
+  .pill.active{background:var(--green-950);border-color:var(--green-950);color:#fff;}
+  .buyer-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;}
+  .buyer-card{
+    background:#fff;border:1px solid var(--border);border-radius:var(--radius-lg);padding:18px;
+    box-shadow:var(--shadow);display:flex;flex-direction:column;gap:12px;
+  }
+  .buyer-top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;}
+  .buyer-name{font-size:15.5px;font-weight:700;line-height:1.3;}
+  .match-tag{
+    text-align:center;flex:none;background:var(--mint-100);color:var(--green-800);border-radius:10px;
+    padding:5px 9px;
+  }
+  .match-tag .num{font-size:14px;font-weight:700;}
+  .match-tag .lbl{font-size:8.5px;text-transform:uppercase;letter-spacing:.3px;}
+  .type-tag{
+    display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:600;color:var(--green-800);
+    background:var(--mint-50);border:1px solid var(--mint-100);padding:3px 9px;border-radius:999px;width:max-content;
+  }
+  .buyer-facts{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+  .fact{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:8px 10px;}
+  .fact .k{font-size:9.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.3px;display:flex;gap:5px;align-items:center;}
+  .fact .v{font-size:13px;font-weight:700;margin-top:2px;}
+  .total-offer{background:var(--bg);border-radius:10px;padding:10px 12px;display:flex;justify-content:space-between;align-items:center;}
+  .total-offer .k{font-size:11.5px;color:var(--muted);}
+  .total-offer .v{font-size:19px;font-weight:700;font-family:'Poppins',sans-serif;}
+  .btn-accept{
+    border:none;background:var(--green-700);color:#fff;padding:11px;border-radius:10px;font-size:13.5px;
+    font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;
+  }
+  .btn-accept:hover{background:var(--green-800);}
+  .btn-accept.locked{background:var(--green-950);}
+
+  /* assistant */
+  .chat-wrap{max-width:480px;margin:0 auto;width:100%;}
+  .chat-frame{
+    background:var(--green-950);border-radius:22px;padding:0;overflow:hidden;box-shadow:var(--shadow);
+  }
+  .chat-head{
+    display:flex;align-items:center;gap:10px;padding:14px 16px;background:var(--green-950);color:#fff;
+  }
+  .chat-head .ico{
+    width:34px;height:34px;border-radius:50%;background:var(--green-700);display:flex;align-items:center;
+    justify-content:center;font-size:16px;
+  }
+  .chat-head .name{font-size:14px;font-weight:700;}
+  .chat-head .status{font-size:11px;opacity:.75;}
+  .chat-body{background:#f2ede4;height:420px;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:10px;}
+  .msg-row{display:flex;gap:8px;align-items:flex-end;}
+  .msg-row.user{flex-direction:row-reverse;}
+  .msg-bubble{
+    max-width:78%;padding:10px 13px;border-radius:14px;font-size:13.5px;line-height:1.5;
+  }
+  .msg-row.bot .msg-bubble{background:#fff;border-bottom-left-radius:4px;color:var(--ink);}
+  .msg-row.user .msg-bubble{background:var(--green-700);color:#fff;border-bottom-right-radius:4px;}
+  .msg-avatar{
+    width:24px;height:24px;border-radius:50%;flex:none;display:flex;align-items:center;justify-content:center;
+    font-size:11px;font-weight:700;color:#fff;
+  }
+  .msg-row.bot .msg-avatar{background:var(--green-700);}
+  .msg-row.user .msg-avatar{background:var(--ink-soft);}
+  .chat-input-row{display:flex;gap:8px;padding:12px;background:var(--green-950);}
+  .chat-input-row input{
+    flex:1;border:none;border-radius:999px;padding:11px 15px;font-size:13.5px;font-family:inherit;
+  }
+  .chat-input-row button{
+    width:42px;height:42px;border-radius:50%;border:none;background:var(--green-600);color:#fff;
+    display:flex;align-items:center;justify-content:center;font-size:16px;cursor:pointer;flex:none;
+  }
+  .quick-replies{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px;}
+  .quick-reply{
+    border:1px solid var(--mint-100);background:var(--mint-50);color:var(--green-800);padding:8px 13px;
+    border-radius:999px;font-size:12.5px;font-weight:600;cursor:pointer;
+  }
+  .quick-reply:hover{background:var(--mint-100);}
+  .bw-tag{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:600;color:var(--ink-soft);background:var(--bg);border:1px solid var(--border);padding:4px 10px;border-radius:999px;}
+
+  @media (max-width:980px){
+    .shell{flex-direction:column;}
+    aside.sidebar{width:100%;position:static;}
+    .stat-grid,.forecast-stats{grid-template-columns:1fr;}
+  }
+
+  /* ---------- Login ---------- */
+  #loginScreen{
+    min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;
+    background:radial-gradient(1100px 700px at 15% 10%, #0e5c3b 0%, transparent 60%),
+               linear-gradient(155deg,var(--green-950),#0a2e1e 60%,#082419);
+  }
+  .login-card{
+    width:100%;max-width:880px;background:#fff;border-radius:24px;overflow:hidden;
+    display:grid;grid-template-columns:1fr 1fr;box-shadow:0 30px 60px -20px rgba(0,0,0,.4);
+  }
+  .login-side{
+    background:linear-gradient(160deg,var(--green-800),var(--green-950));color:#fff;
+    padding:36px 32px;display:flex;flex-direction:column;justify-content:space-between;gap:24px;
+  }
+  .login-side .brand-icon{background:rgba(255,255,255,.15);}
+  .login-side h2{font-size:22px;margin:18px 0 8px;line-height:1.35;}
+  .login-side p{font-size:13px;opacity:.85;line-height:1.6;margin:0;}
+  .login-stat-list{display:flex;flex-direction:column;gap:12px;margin-top:10px;}
+  .login-stat-list .row{display:flex;align-items:center;gap:10px;font-size:12.5px;opacity:.92;}
+  .login-stat-list .row .ico{width:26px;height:26px;border-radius:8px;background:rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;font-size:13px;flex:none;}
+  .login-form{padding:36px 34px;display:flex;flex-direction:column;gap:16px;}
+  .login-form h3{margin:0;font-size:19px;}
+  .login-form .sub{font-size:12.5px;color:var(--muted);margin-top:-10px;}
+  .role-row{display:flex;gap:8px;}
+  .role-btn{
+    flex:1;border:1px solid var(--border);background:#fbfcfb;padding:10px 8px;border-radius:11px;
+    font-size:12px;font-weight:600;color:var(--ink-soft);cursor:pointer;text-align:center;
+  }
+  .role-btn.active{background:var(--mint-50);border-color:var(--green-600);color:var(--green-800);}
+  .otp-row{display:flex;gap:8px;}
+  .otp-row input{width:44px;text-align:center;font-size:17px;padding:10px 0;border:1px solid var(--border);border-radius:10px;}
+  .btn-primary{
+    border:none;background:var(--green-700);color:#fff;padding:12px;border-radius:11px;font-size:13.5px;
+    font-weight:700;cursor:pointer;
+  }
+  .btn-primary:hover{background:var(--green-800);}
+  .btn-link{background:none;border:none;color:var(--green-800);font-size:12.5px;font-weight:600;cursor:pointer;padding:0;text-align:center;}
+  .login-note{font-size:11px;color:var(--muted);text-align:center;margin-top:4px;}
+  .hidden{display:none !important;}
+  @media (max-width:720px){ .login-card{grid-template-columns:1fr;} .login-side{display:none;} }
+
+  /* ---------- Notifications ---------- */
+  .bell-wrap{position:relative;}
+  .bell-btn{
+    width:38px;height:38px;border-radius:50%;border:1px solid var(--border);background:#fff;
+    display:flex;align-items:center;justify-content:center;font-size:16px;cursor:pointer;position:relative;
+  }
+  .bell-dot{position:absolute;top:6px;right:7px;width:8px;height:8px;border-radius:50%;background:var(--red);border:2px solid #fff;}
+  .notif-panel{
+    position:absolute;top:48px;right:0;width:300px;background:#fff;border:1px solid var(--border);
+    border-radius:14px;box-shadow:var(--shadow);padding:8px;z-index:50;display:none;
+  }
+  .notif-panel.open{display:block;}
+  .notif-panel .head{font-size:12.5px;font-weight:700;padding:8px 10px 4px;color:var(--ink-soft);}
+  .notif-item{display:flex;gap:10px;padding:9px 10px;border-radius:10px;cursor:pointer;}
+  .notif-item:hover{background:var(--bg);}
+  .notif-item .ico{width:30px;height:30px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:14px;flex:none;}
+  .notif-item .t{font-size:12.5px;font-weight:600;color:var(--ink);}
+  .notif-item .d{font-size:11px;color:var(--muted);margin-top:1px;}
+  .user-menu{position:relative;}
+  .user-dropdown{
+    position:absolute;top:46px;right:0;width:170px;background:#fff;border:1px solid var(--border);
+    border-radius:12px;box-shadow:var(--shadow);padding:6px;z-index:50;display:none;
+  }
+  .user-dropdown.open{display:block;}
+  .user-dropdown button{
+    width:100%;text-align:left;border:none;background:none;padding:9px 10px;border-radius:8px;
+    font-size:12.5px;font-weight:600;color:var(--ink-soft);cursor:pointer;
+  }
+  .user-dropdown button:hover{background:var(--bg);}
+
+  /* ---------- Overview & Track ---------- */
+  .welcome-card{
+    background:linear-gradient(120deg,var(--green-950),var(--green-800));color:#fff;border-radius:var(--radius-lg);
+    padding:22px 24px;display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;
+  }
+  .welcome-card h2{margin:0 0 6px;font-size:20px;}
+  .welcome-card p{margin:0;font-size:13px;opacity:.85;max-width:520px;line-height:1.5;}
+  .weather-chip{background:rgba(255,255,255,.14);border-radius:14px;padding:12px 16px;text-align:center;min-width:120px;}
+  .weather-chip .t{font-size:22px;font-weight:700;}
+  .weather-chip .l{font-size:11px;opacity:.85;}
+  .quick-actions{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;}
+  .qa-btn{
+    background:#fff;border:1px solid var(--border);border-radius:14px;padding:14px;display:flex;flex-direction:column;
+    gap:8px;cursor:pointer;text-align:left;box-shadow:var(--shadow);
+  }
+  .qa-btn .ico{width:34px;height:34px;border-radius:10px;background:var(--mint-100);color:var(--green-800);display:flex;align-items:center;justify-content:center;font-size:16px;}
+  .qa-btn .t{font-size:12.5px;font-weight:700;color:var(--ink);}
+  .advisory-card{display:grid;grid-template-columns:1.3fr 1fr;gap:16px;}
+  .advisory-text{font-size:13px;line-height:1.6;color:var(--ink-soft);}
+  .timeline{display:flex;flex-direction:column;gap:0;padding:6px 4px;}
+  .tl-item{display:flex;gap:14px;position:relative;padding-bottom:26px;}
+  .tl-item:last-child{padding-bottom:0;}
+  .tl-dot-wrap{display:flex;flex-direction:column;align-items:center;}
+  .tl-dot{width:30px;height:30px;border-radius:50%;background:var(--green-700);color:#fff;display:flex;align-items:center;justify-content:center;font-size:14px;flex:none;z-index:1;}
+  .tl-item.pending .tl-dot{background:#dfe6e1;color:var(--muted);}
+  .tl-item.current .tl-dot{background:var(--amber);box-shadow:0 0 0 4px var(--amber-bg);}
+  .tl-item.current .tl-title{color:var(--amber);}
+  .tl-line{width:2px;flex:1;background:var(--border);margin-top:2px;}
+  .tl-item:last-child .tl-line{display:none;}
+  .tl-body{padding-top:3px;}
+  .tl-title{font-size:13.5px;font-weight:700;color:var(--ink);}
+  .tl-meta{font-size:11.5px;color:var(--muted);margin-top:2px;}
+  .hash-card{background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:12px 14px;margin-top:12px;font-size:11.5px;color:var(--muted);word-break:break-all;}
+  .hash-card b{color:var(--green-800);}
+
+  /* ---------- Story strip & how-it-works ---------- */
+  .story-strip{
+    display:flex;align-items:center;gap:10px;flex-wrap:wrap;background:#fff;border:1px solid var(--border);
+    border-radius:14px;padding:10px 16px;font-size:12px;color:var(--muted);box-shadow:var(--shadow);
+  }
+  .story-step{display:flex;align-items:center;gap:6px;}
+  .story-step b{color:var(--ink);font-weight:700;}
+  .story-num{
+    width:18px;height:18px;border-radius:50%;background:var(--green-950);color:#fff;font-size:10px;font-weight:700;
+    display:flex;align-items:center;justify-content:center;flex:none;
+  }
+  .story-arrow{color:var(--green-600);font-weight:700;}
+  .how-it-works{
+    font-size:11.5px;color:var(--muted);background:var(--bg);border:1px dashed var(--border);border-radius:10px;
+    padding:9px 12px;margin:0 20px 16px;line-height:1.5;
+  }
+  .how-it-works b{color:var(--green-800);}
+  .demo-controls{display:flex;gap:8px;}
+  .demo-btn{
+    display:flex;align-items:center;gap:6px;font-size:12px;font-weight:700;border-radius:10px;padding:8px 12px;
+    cursor:pointer;border:1px solid var(--border);background:#fff;color:var(--ink-soft);
+  }
+  .demo-btn.run{background:var(--green-700);color:#fff;border-color:var(--green-700);}
+  .demo-btn.reset{color:var(--red);}
+
+  /* ---------- Impact section ---------- */
+  .impact-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;}
+  .impact-card{background:#fff;border:1px solid var(--border);border-radius:14px;padding:14px;text-align:left;box-shadow:var(--shadow);}
+  .impact-card .ico{font-size:19px;margin-bottom:6px;}
+  .impact-card .t{font-size:12.5px;font-weight:700;color:var(--ink);line-height:1.4;}
+
+  /* ---------- Match breakdown ---------- */
+  .match-checklist{display:flex;flex-direction:column;gap:5px;font-size:11.5px;color:var(--ink-soft);}
+  .match-checklist .ok{color:var(--green-700);}
+  .match-checklist .bad{color:var(--red);}
+
+  /* ---------- Order & Escrow ---------- */
+  .order-card{background:#fff;border:1px solid var(--border);border-radius:var(--radius-lg);box-shadow:var(--shadow);padding:20px;}
+  .order-empty{text-align:center;padding:40px 20px;color:var(--muted);}
+  .order-empty .ico{font-size:34px;margin-bottom:10px;}
+  .order-head-row{display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px;margin-bottom:16px;}
+  .status-badge{font-size:11.5px;font-weight:700;padding:6px 12px;border-radius:999px;white-space:nowrap;}
+  .order-facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-bottom:18px;}
+  .order-fact .k{font-size:10px;text-transform:uppercase;letter-spacing:.3px;color:var(--muted);}
+  .order-fact .v{font-size:14px;font-weight:700;color:var(--ink);margin-top:2px;}
+  .stepper{display:flex;gap:4px;margin-bottom:18px;flex-wrap:wrap;}
+  .step-chip{flex:1;min-width:80px;text-align:center;font-size:10px;font-weight:700;padding:8px 4px;border-radius:8px;background:var(--bg);color:var(--muted);border:1px solid var(--border);}
+  .step-chip.done{background:var(--mint-100);color:var(--green-800);border-color:var(--mint-100);}
+  .step-chip.current{background:var(--green-700);color:#fff;border-color:var(--green-700);}
+  .otp-verify-row{display:flex;gap:8px;margin:10px 0;}
+  .otp-verify-row input{width:46px;height:50px;text-align:center;font-size:19px;border:1px solid var(--border);border-radius:10px;}
+  .otp-error{color:var(--red);font-size:12px;font-weight:600;display:none;margin-top:4px;}
+  .otp-error.show{display:block;}
+  .success-block{text-align:center;padding:24px 10px;}
+  .success-block .big{font-size:30px;font-weight:700;color:var(--green-800);font-family:'Poppins',sans-serif;margin:10px 0 4px;}
+  .success-block .note{font-size:11.5px;color:var(--muted);}
+  .toast{
+    position:fixed;bottom:22px;right:22px;background:var(--green-950);color:#fff;padding:12px 18px;border-radius:12px;
+    font-size:13px;font-weight:600;box-shadow:0 10px 30px -8px rgba(0,0,0,.4);z-index:200;
+    opacity:0;transform:translateY(10px);transition:opacity .25s,transform .25s;pointer-events:none;
+  }
+  .toast.show{opacity:1;transform:translateY(0);}
+  .toast.error{background:var(--red);}
+
+  /* ---------- Compact chips / mini-charts (declutter pass) ---------- */
+  .chip-row{display:flex;flex-wrap:wrap;gap:6px;}
+  .info-chip{
+    display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:600;
+    padding:5px 9px;border-radius:999px;background:var(--bg);border:1px solid var(--border);color:var(--ink-soft);
+  }
+  .info-chip.ok{background:var(--mint-50);border-color:var(--mint-100);color:var(--green-800);}
+  .info-chip.bad{background:#fbeae6;border-color:#f3d3ca;color:var(--red);}
+  .stat-chip-row{display:flex;flex-wrap:wrap;gap:10px;}
+  .stat-chip{
+    display:flex;align-items:center;gap:8px;background:#fff;border-radius:12px;padding:8px 12px;min-width:110px;
+  }
+  .stat-chip .ico{font-size:16px;}
+  .stat-chip .v{font-size:14.5px;font-weight:700;font-family:'Poppins',sans-serif;color:var(--ink);line-height:1.1;}
+  .stat-chip .l{font-size:9.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.3px;}
+  .bar-cell{display:flex;align-items:center;gap:8px;min-width:120px;}
+  .bar-track{flex:1;height:7px;border-radius:999px;background:#eef3ef;overflow:hidden;}
+  .bar-fill{height:100%;border-radius:999px;background:var(--green-600);}
+  .bar-fill.best{background:var(--amber);}
+  .delta-badge{
+    display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:var(--green-800);
+    background:var(--mint-50);border:1px solid var(--mint-100);padding:6px 12px;border-radius:999px;
+  }
+  .hiw-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:0 20px 16px;}
+  .hiw-tag{
+    display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:600;color:var(--muted);
+    background:var(--bg);border:1px dashed var(--border);padding:6px 10px;border-radius:999px;
+  }
+</style>
+</head>
+<body>
+
+<!-- LOGIN SCREEN -->
+<div id="loginScreen">
+  <div class="login-card">
+    <div class="login-side">
+      <div>
+        <div class="brand-icon">🌱</div>
+        <h2>Every harvest deserves its best price.</h2>
+        <p>AgriConnect links farmers directly to the mandi, buyer, or FPO offering the highest net realizable value — with AI price forecasts in your language.</p>
+      </div>
+      <div class="login-stat-list">
+        <div class="row"><span class="ico">📈</span> Live APMC rates across 4+ mandis near you</div>
+        <div class="row"><span class="ico">🧾</span> Verified digital crop lot IDs, ready for bidding</div>
+        <div class="row"><span class="ico">💬</span> Vernacular AI assistant on WhatsApp / Telegram</div>
+      </div>
+    </div>
+    <div class="login-form">
+      <h3>Welcome back</h3>
+      <div class="sub">Log in to manage your crop lots and offers</div>
+      <div class="role-row" id="roleRow">
+        <button class="role-btn active" data-role="Farmer">🌾 Farmer</button>
+        <button class="role-btn" data-role="FPO Admin">🏢 FPO Admin</button>
+        <button class="role-btn" data-role="Buyer">🧑‍🤝‍🧑 Buyer</button>
+      </div>
+      <div class="field" style="margin:0;">
+        <label>📱 Mobile Number</label>
+        <input type="tel" id="loginPhone" value="9876543210" maxlength="10">
+      </div>
+      <div id="otpBlock" class="field hidden" style="margin:0;">
+        <label>🔑 Enter OTP <span class="qty-value">(sent via SMS)</span></label>
+        <div class="otp-row">
+          <input maxlength="1"><input maxlength="1"><input maxlength="1"><input maxlength="1"><input maxlength="1"><input maxlength="1">
+        </div>
+      </div>
+      <button class="btn-primary" id="sendOtpBtn">Send OTP</button>
+      <button class="btn-link hidden" id="skipLoginBtn">Bypass &amp; Continue as Guest</button>
+      <div class="login-note">By continuing you agree to AgriConnect's Terms &amp; Farmer Data Policy.</div>
+    </div>
+  </div>
+</div>
+
+<!-- APP SCREEN -->
+<div id="appScreen" class="hidden">
+<header class="app-header">
+  <div class="brand">
+    <div class="brand-icon">🌱</div>
+    <div>
+      <div class="brand-title-row">
+        <span class="logo-text">AgriConnect</span>
+        <span class="badge-pill">SIH 2026 · Team Avenix</span>
+      </div>
+      <div class="brand-sub">Smart Market Linkage, Predictive Price Discovery &amp; NRV Optimization</div>
+    </div>
+  </div>
+  <div class="header-right">
+    <div class="demo-controls">
+      <button class="demo-btn run" id="runDemoBtn">▶ Auto-Demo</button>
+      <button class="demo-btn reset" id="resetDemoBtn">↺ Reset</button>
+    </div>
+    <div class="lang-pick" id="langPick">🌐 English ⌄</div>
+    <div class="bell-wrap">
+      <button class="bell-btn" id="bellBtn">🔔<span class="bell-dot"></span></button>
+      <div class="notif-panel" id="notifPanel">
+        <div class="head">Notifications</div>
+        <div id="notifList"></div>
+      </div>
+    </div>
+    <div class="user-menu">
+      <div class="user-chip" id="userChipBtn" style="cursor:pointer;">
+        <div class="avatar" id="userAvatar">RS</div>
+        <div>
+          <div class="user-name" id="userNameLbl">Ramesh Sahoo</div>
+          <div class="user-role" id="userRoleLbl">Farmer · Brahmapur Hub, Odisha</div>
+        </div>
+      </div>
+      <div class="user-dropdown" id="userDropdown">
+        <button id="viewProfileBtn">👤 My Profile</button>
+        <button id="switchRoleBtn">🔁 Switch Role</button>
+        <button id="logoutBtn">🚪 Log Out</button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="shell">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="field">
+      <label><span class="ico">👤</span> Farmer / FPO Name</label>
+      <input type="text" id="farmerName" value="Ramesh Sahoo">
+    </div>
+    <div class="field">
+      <label><span class="ico">📍</span> Origin Location</label>
+      <input type="text" id="origin" value="Brahmapur, Ganjam, Odisha">
+    </div>
+    <div class="field">
+      <label><span class="ico">📦</span> Crop / Commodity</label>
+      <select id="crop">
+        <option value="tomato">Tomato (Tamatar)</option>
+        <option value="onion">Onion (Pyaz)</option>
+        <option value="potato">Potato (Aloo)</option>
+      </select>
+    </div>
+    <div class="field">
+      <label><span class="ico">⚖️</span> Harvest Quantity <span class="qty-value">— <span id="qtyLabel">1,200</span> kg</span></label>
+      <input type="range" id="qtySlider" min="100" max="10000" step="50" value="1200">
+      <div class="range-row"><span>100 kg</span><span>10,000 kg</span></div>
+    </div>
+    <div class="field">
+      <label><span class="ico">✅</span> Quality Assessment Grade</label>
+      <select id="grade">
+        <option value="1">Grade A (Premium · Firm &amp; Uniform)</option>
+        <option value="0.93">Grade B (Standard · Minor Blemish)</option>
+        <option value="0.85">Grade C (Fair · Mixed Ripeness)</option>
+      </select>
+    </div>
+    <div class="field">
+      <label><span class="ico">📅</span> Harvest Date</label>
+      <input type="date" id="harvestDate" value="2026-08-29">
+    </div>
+
+    <div class="lot-card">
+      <div class="lot-label">DIGITAL CROP LOT ID</div>
+      <div class="lot-row">
+        <div class="lot-id" id="lotIdText">LOT-TOM-2026-9842</div>
+        <!-- REAL QR CODE INJECTED HERE -->
+        <div class="qr" id="qrContainer"></div> 
+      </div>
+      <div class="status-tag"><span class="dot"></span> <span id="lotStatusText">Verified &amp; Ready for Bidding</span></div>
+      <div class="lot-meta">
+        <div><div class="k">Crop</div><div class="v" id="lotCropText">Tomato · A</div></div>
+        <div><div class="k">Quantity</div><div class="v" id="lotQty">1,200 kg</div></div>
+        <div><div class="k">Farmer</div><div class="v">Ramesh Sahoo</div></div>
+        <div><div class="k">Origin</div><div class="v">Brahmapur, Ganjam…</div></div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="panel">
+    <nav class="tabbar">
+      <button class="tab-btn active" data-tab="overview">🏠 Overview</button>
+      <button class="tab-btn" data-tab="nrv">💳 Net Price / NRV</button>
+      <button class="tab-btn" data-tab="forecast">📈 Price Forecast</button>
+      <button class="tab-btn" data-tab="buyers">🧑‍🤝‍🧑 Buyer Matching</button>
+      <button class="tab-btn" data-tab="order">🔐 Order &amp; Escrow</button>
+      <button class="tab-btn" data-tab="track">🔗 Track &amp; Trace</button>
+      <button class="tab-btn" data-tab="assistant">💬 AI Assistant</button>
+    </nav>
+    <div class="story-strip" id="storyStrip">
+      <div class="story-step" title="NRV comparison across all mandis"><span class="story-num">1</span> 📊 Where to sell</div>
+      <div class="story-arrow">→</div>
+      <div class="story-step" title="AI price forecast &amp; trend"><span class="story-num">2</span> 📈 When to sell</div>
+      <div class="story-arrow">→</div>
+      <div class="story-step" title="AI-scored buyer matching"><span class="story-num">3</span> 🤝 Who to sell to</div>
+      <div class="story-arrow">→</div>
+      <div class="story-step" title="Escrow lock + delivery OTP"><span class="story-num">4</span> 🔒 Get paid safely</div>
+    </div>
+
+    <!-- TAB: OVERVIEW -->
+    <section class="tab-view active" id="tab-overview">
+      <div class="welcome-card">
+        <div>
+          <h2 id="welcomeName">Good to see you, Ramesh 👋</h2>
+          <div class="stat-chip-row" style="margin-top:10px;">
+            <div class="stat-chip" style="background:rgba(255,255,255,.14);"><span class="ico">🔔</span><div><div class="v" id="ovPendingOffers" style="color:#fff;">3</div><div class="l" style="color:rgba(255,255,255,.7);">Pending offers</div></div></div>
+            <div class="stat-chip" style="background:rgba(255,255,255,.14);"><span class="ico">📈</span><div><div class="v" style="color:#fff;" id="ovAiSignalText">Hold &amp; Wait</div><div class="l" style="color:rgba(255,255,255,.7);">AI signal</div></div></div>
+            <div class="stat-chip" style="background:rgba(255,255,255,.14);"><span class="ico">✅</span><div><div class="v" style="color:#fff;">1 Lot</div><div class="l" style="color:rgba(255,255,255,.7);">Verified</div></div></div>
+          </div>
+        </div>
+        <div class="weather-chip">
+          <div class="t">31°C</div>
+          <div class="l">Brahmapur · Partly Cloudy</div>
+        </div>
+      </div>
+
+      <div class="stat-grid">
+        <div class="stat-card">
+          <div class="stat-icon" style="background:var(--green-700);">📦</div>
+          <div class="stat-label">Active Crop Lots</div>
+          <div class="stat-value">1</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon" style="background:var(--amber);">💰</div>
+          <div class="stat-label">Best NRV Available Now</div>
+          <div class="stat-value" id="ovBestNRV">₹33,655</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon" style="background:var(--blue);">🧑‍🤝‍🧑</div>
+          <div class="stat-label">Institutional Offers</div>
+          <div class="stat-value" id="ovOfferCount">3</div>
+        </div>
+      </div>
+
+      <div class="quick-actions">
+        <button class="qa-btn" data-goto="nrv"><div class="ico">💳</div><div class="t">Compare Mandi Prices</div></button>
+        <button class="qa-btn" data-goto="buyers"><div class="ico">🧑‍🤝‍🧑</div><div class="t">Review Buyer Offers</div></button>
+        <button class="qa-btn" data-goto="track"><div class="ico">🔗</div><div class="t">Track My Crop Lot</div></button>
+        <button class="qa-btn" data-goto="assistant"><div class="ico">💬</div><div class="t">Ask AI Assistant</div></button>
+      </div>
+    </section>
+
+    <!-- TAB: NRV -->
+    <section class="tab-view" id="tab-nrv">
+      <div class="stat-grid">
+        <div class="stat-card">
+          <div class="stat-top">
+            <div class="stat-icon" style="background:var(--amber);">🏆</div>
+            <span class="stat-tag" style="color:var(--amber);background:var(--amber-bg);">Highest Net Payout</span>
+          </div>
+          <div class="stat-label">Optimal Selling Mandi</div>
+          <div class="stat-value" id="optMandi">Bhanjanagar Mandi</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-top">
+            <div class="stat-icon" style="background:var(--green-700);">💼</div>
+            <span class="stat-tag" style="color:var(--green-800);background:var(--mint-100);">After all deductions</span>
+          </div>
+          <div class="stat-label">Maximum Net Realizable Value</div>
+          <div class="stat-value" id="maxNRV">₹33,655</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-top">
+            <div class="stat-icon" style="background:var(--blue);">🚚</div>
+            <span class="stat-tag" style="color:var(--blue);background:var(--blue-bg);">@ ₹10/km</span>
+          </div>
+          <div class="stat-label">Logistics &amp; Freight Cost</div>
+          <div class="stat-value" id="optFreight">₹800.00</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-head">
+          <div class="card-title">Multi-Mandi NRV Comparison</div>
+          <span class="live-tag">Live APMC Rates</span>
+        </div>
+        <table class="nrv-table">
+          <thead>
+            <tr><th>Mandi / Market</th><th>Distance</th><th>Gross Rate</th><th>Gross Revenue</th><th>Freight</th><th>APMC Cess</th><th>NRV</th><th>Action</th></tr>
+          </thead>
+          <tbody id="nrvBody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- TAB: FORECAST -->
+    <section class="tab-view" id="tab-forecast">
+      <div class="ai-signal" id="aiSignalBox">
+        <div class="ai-signal-top">
+          <div class="ai-signal-icon" id="aiSignalIcon">📈</div>
+          <div class="ai-signal-title" id="aiSignalTitle">AI Signal: HOLD &amp; WAIT</div>
+        </div>
+        <div class="stat-chip-row" style="margin-top:8px;">
+          <div class="stat-chip"><span class="ico">🧭</span><div><div class="v">+₹0.38</div><div class="l">₹/kg/day</div></div></div>
+          <div class="stat-chip"><span class="ico">⏳</span><div><div class="v">5–7 days</div><div class="l">Hold window</div></div></div>
+          <div class="stat-chip"><span class="ico">💰</span><div><div class="v" id="extraProfit">+₹3,192</div><div class="l">Extra profit</div></div></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-head"><div class="card-title">14-Day Historical APMC Modal Prices + 7-Day ML Forecast</div></div>
+        <div class="chart-wrap">
+          <svg viewBox="0 0 900 320" width="100%" style="overflow:visible;font-family:Inter,sans-serif;">
+            <!-- gridlines -->
+            <g stroke="#e7ede9" stroke-width="1">
+              <line x1="40" y1="20" x2="40" y2="270"/>
+              <line x1="40" y1="270" x2="880" y2="270"/>
+            </g>
+            <g font-size="10" fill="#8a978e">
+              <text x="4" y="24">₹33.74</text>
+              <text x="4" y="105">₹29.65</text>
+              <text x="4" y="188">₹26.05</text>
+              <text x="4" y="270">₹23.05</text>
+            </g>
+            <!-- forecast divider -->
+            <line x1="590" y1="20" x2="590" y2="270" stroke="#c8ded1" stroke-dasharray="4 4"/>
+            <text x="596" y="16" font-size="10" fill="#68786f">Forecast →</text>
+
+            <!-- confidence band -->
+            <polygon points="590,205 640,192 690,178 740,158 790,138 830,120 830,150 790,168 740,188 690,208 640,222 590,235" fill="#d7f7e6" opacity="0.7"/>
+
+            <!-- historical line -->
+            <polyline fill="none" stroke="#1b7fd1" stroke-width="2.5"
+              points="60,238 110,232 160,205 210,207 260,178 310,183 360,150 410,142 460,132 510,120 560,110 590,105"/>
+            <!-- forecast line -->
+            <polyline fill="none" stroke="#17a465" stroke-width="2.5" stroke-dasharray="6 5"
+              points="590,105 640,92 690,78 740,58 790,38 830,20"/>
+
+            <!-- dots -->
+            <g fill="#1b7fd1">
+              <circle cx="60" cy="238" r="3.5"/><circle cx="110" cy="232" r="3.5"/><circle cx="160" cy="205" r="3.5"/>
+              <circle cx="210" cy="207" r="3.5"/><circle cx="260" cy="178" r="3.5"/><circle cx="310" cy="183" r="3.5"/>
+              <circle cx="360" cy="150" r="3.5"/><circle cx="410" cy="142" r="3.5"/><circle cx="460" cy="132" r="3.5"/>
+              <circle cx="510" cy="120" r="3.5"/><circle cx="560" cy="110" r="3.5"/><circle cx="590" cy="105" r="3.5"/>
+            </g>
+            <g fill="#17a465">
+              <circle cx="640" cy="92" r="3.5"/><circle cx="690" cy="78" r="3.5"/><circle cx="740" cy="58" r="3.5"/>
+              <circle cx="790" cy="38" r="3.5"/><circle cx="830" cy="20" r="3.5"/>
+            </g>
+
+            <g font-size="9.5" fill="#8a978e">
+              <text x="52" y="288">16 Aug</text><text x="152" y="288">20 Aug</text><text x="252" y="288">24 Aug</text>
+              <text x="352" y="288">28 Aug</text><text x="452" y="288">01 Sept</text><text x="552" y="288">05 Sept</text>
+              <text x="700" y="288">05 Sept</text>
+            </g>
+          </svg>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB: BUYERS -->
+    <section class="tab-view" id="tab-buyers">
+      <div class="card" style="padding:18px 20px;">
+        <div class="card-title" style="margin-bottom:12px;">Institutional Buyers &amp; Verified FPO Procurement Orders</div>
+        <div class="pill-row">
+          <button class="pill active" data-filter="All">All Buyers</button>
+          <button class="pill" data-filter="Verified FPO">Verified FPOs</button>
+          <button class="pill" data-filter="Direct Retailer">Direct Retailers</button>
+          <button class="pill" data-filter="Govt Agency">Govt Agencies</button>
+        </div>
+      </div>
+      <div class="buyer-grid" id="buyerGrid"></div>
+    </section>
+
+    <!-- TAB: ORDER & ESCROW -->
+    <section class="tab-view" id="tab-order">
+      <div class="order-card" id="orderCard"></div>
+    </section>
+
+    <!-- TAB: TRACK & TRACE -->
+    <section class="tab-view" id="tab-track">
+      <div class="card" style="padding:20px;">
+        <div class="card-title" style="margin-bottom:2px;">🔗 Blockchain-Verified Crop Lot Journey</div>
+        <div style="font-size:12.5px;color:var(--muted);margin-bottom:16px;" id="trackLotLine">LOT-TOM-2026-9842 · Tomato · Grade A · Ramesh Sahoo</div>
+        <div class="timeline" id="timelineBody"></div>
+        <div class="hash-card">🔒 <b>Ledger hash:</b> 0x8e2f...c941a3</div>
+      </div>
+    </section>
+
+    <!-- TAB: ASSISTANT -->
+    <section class="tab-view" id="tab-assistant">
+      <div class="card-head" style="padding:0;">
+        <div class="card-title">Conversational Farmer AI Assistant</div>
+        <span class="bw-tag">📶 Telegram / WhatsApp · Low-Bandwidth</span>
+      </div>
+      <div class="chat-wrap">
+        <div class="chat-frame">
+          <div class="chat-head">
+            <div class="ico">🌾</div>
+            <div>
+              <div class="name">AgriConnect AI</div>
+              <div class="status">online · vernacular</div>
+            </div>
+          </div>
+          <div class="chat-body" id="chatBody">
+            <div class="msg-row bot">
+              <div class="msg-avatar">AI</div>
+              <div class="msg-bubble">Namaste Ramesh ji! Aaj Bhanjanagar mandi mein tamatar ka bhaav sabse accha hai.</div>
+            </div>
+          </div>
+          <div style="padding:0 12px 12px;background:var(--green-950);">
+            <div class="quick-replies">
+              <span class="quick-reply" data-q="Aaj tamatar ka rate kya hai?">Aaj tamatar ka rate kya hai?</span>
+              <span class="quick-reply" data-q="Should I sell now?">Should I sell now?</span>
+              <span class="quick-reply" data-q="Which buyer is best?">Which buyer is best?</span>
+            </div>
+          </div>
+          <div class="chat-input-row">
+            <input type="text" id="chatInput" placeholder="Type a query...">
+            <button id="chatSend">➤</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</div>
+</div><!-- /#appScreen -->
+
+<script>
+// --- GLOBAL API CONFIG ---
+const API_URL = "http://localhost:8000";
+let authToken = "";
+
+const fmt = n => '₹' + Math.round(n).toLocaleString('en-IN');
+const fmt2 = n => '₹' + n.toFixed(2);
+
+// ---------- Crop-aware datasets ----------
+const cropMeta = {
+  tomato: {label:'Tomato', code:'TOM'},
+  onion:  {label:'Onion',  code:'ONI'},
+  potato: {label:'Potato', code:'POT'},
+};
+const mandisByCrop = {
+  tomato: [
+    {name:'Brahmapur APMC', distance:0.0, rate:24.50, cessPct:1.5},
+    {name:'Hinjilicut Mandi', distance:19.2, rate:26.80, cessPct:1.5},
+    {name:'Digapahandi Market', distance:23.3, rate:24.99, cessPct:2.0},
+    {name:'Bhanjanagar Mandi', distance:80.0, rate:29.15, cessPct:1.5},
+  ],
+  onion: [
+    {name:'Brahmapur APMC', distance:0.0, rate:18.20, cessPct:1.5},
+    {name:'Hinjilicut Mandi', distance:19.2, rate:19.40, cessPct:1.5},
+    {name:'Digapahandi Market', distance:23.3, rate:17.80, cessPct:2.0},
+    {name:'Bhanjanagar Mandi', distance:80.0, rate:21.60, cessPct:1.5},
+  ],
+  potato: [
+    {name:'Brahmapur APMC', distance:0.0, rate:14.50, cessPct:1.5},
+    {name:'Hinjilicut Mandi', distance:19.2, rate:15.60, cessPct:1.5},
+    {name:'Digapahandi Market', distance:23.3, rate:14.10, cessPct:2.0},
+    {name:'Bhanjanagar Mandi', distance:80.0, rate:16.90, cessPct:1.5},
+  ],
+};
+
+// NOTICE: Kalinga Agro's requirement is changed to 1200kg to fix the logic mismatch
+const buyersByCrop = {
+  tomato: [
+    {name:'Kalinga Agro Producers FPO Ltd', type:'Verified FPO', rate:29, required:1200, distance:12, delivery:'Hub Pickup'},
+    {name:'FreshDirect Retail Wholesale', type:'Direct Retailer', rate:27, required:2000, distance:18, delivery:'Farmgate'},
+    {name:'Odisha State Civil Supplies Corp', type:'Govt Agency', rate:26, required:10000, distance:25, delivery:'Mandi Delivery'},
+  ],
+  onion: [
+    {name:'Kalinga Agro Producers FPO Ltd', type:'Verified FPO', rate:21, required:1200, distance:12, delivery:'Hub Pickup'},
+    {name:'FreshDirect Retail Wholesale', type:'Direct Retailer', rate:19.5, required:1800, distance:18, delivery:'Farmgate'},
+    {name:'Odisha State Civil Supplies Corp', type:'Govt Agency', rate:18.5, required:8000, distance:25, delivery:'Mandi Delivery'},
+  ],
+  potato: [
+    {name:'Kalinga Agro Producers FPO Ltd', type:'Verified FPO', rate:16.5, required:1200, distance:12, delivery:'Hub Pickup'},
+    {name:'FreshDirect Retail Wholesale', type:'Direct Retailer', rate:15.5, required:2500, distance:18, delivery:'Farmgate'},
+    {name:'Odisha State Civil Supplies Corp', type:'Govt Agency', rate:14.5, required:9000, distance:25, delivery:'Mandi Delivery'},
+  ],
+};
+const gradeLetters = {'1':'A','0.93':'B','0.85':'C'};
+
+let currentFilter = 'All';
+let order = null; // active order/escrow object, or null
+const STEP_LABELS = ['Offer Accepted','Escrow Locked','In Transit','Delivered','Paid'];
+const STATUS_TO_STEP = {OFFER_ACCEPTED:0, ESCROW_LOCKED:1, IN_TRANSIT:2, DELIVERY_VERIFIED:3, PAYMENT_RELEASED:4};
+const STATUS_LABEL = {OFFER_ACCEPTED:'Offer Accepted', ESCROW_LOCKED:'Escrow Locked', IN_TRANSIT:'In Transit', DELIVERY_VERIFIED:'Delivery Verified', PAYMENT_RELEASED:'Payment Released'};
+const STATUS_COLOR = {OFFER_ACCEPTED:{bg:'var(--blue-bg)',fg:'var(--blue)'}, ESCROW_LOCKED:{bg:'var(--mint-100)',fg:'var(--green-800)'}, IN_TRANSIT:{bg:'var(--amber-bg)',fg:'var(--amber)'}, DELIVERY_VERIFIED:{bg:'var(--mint-100)',fg:'var(--green-800)'}, PAYMENT_RELEASED:{bg:'var(--mint-100)',fg:'var(--green-800)'}};
+
+function currentQty(){ return parseInt(document.getElementById('qtySlider').value, 10); }
+function currentGrade(){ return parseFloat(document.getElementById('grade').value); }
+function currentCrop(){ return document.getElementById('crop').value; }
+function cropRates(){ return mandisByCrop[currentCrop()]; }
+function cropBuyers(){ return buyersByCrop[currentCrop()]; }
+
+// ---------- Toasts ----------
+function toast(msg, type){
+  let el = document.getElementById('toastEl');
+  if(!el){
+    el = document.createElement('div');
+    el.id = 'toastEl';
+    el.className = 'toast';
+    document.body.appendChild(el);
+  }
+  el.textContent = msg;
+  el.className = 'toast show' + (type==='error' ? ' error' : '');
+  clearTimeout(el._t);
+  el._t = setTimeout(()=> el.classList.remove('show'), 2600);
+}
+
+// ---------- Notifications ----------
+let notifications = [
+  {icon:'✅', bg:'var(--mint-100)', title:'Lot LOT-TOM-2026-9842 verified', desc:'Ready for bidding · 1d ago', tab:'track'},
+  {icon:'🌦️', bg:'var(--amber-bg)', title:'Light rain expected tomorrow', desc:'Brahmapur, Ganjam · 8h ago', tab:'overview'}
+];
+function addNotification(icon,bg,title,desc,tab){
+  notifications.unshift({icon,bg,title,desc,tab});
+  notifications = notifications.slice(0,8);
+  renderNotifications();
+}
+function renderNotifications(){
+  const list = document.getElementById('notifList');
+  list.innerHTML = notifications.map(n=>`
+    <div class="notif-item" data-tab="${n.tab}">
+      <div class="ico" style="background:${n.bg};">${n.icon}</div>
+      <div><div class="t">${n.title}</div><div class="d">${n.desc}</div></div>
+    </div>`).join('');
+  list.querySelectorAll('.notif-item').forEach(el=>{
+    el.addEventListener('click', ()=>{
+      document.getElementById('notifPanel').classList.remove('open');
+      goToTab(el.dataset.tab);
+    });
+  });
+}
+
+function renderSidebar(){
+  const qty = currentQty();
+  const crop = currentCrop();
+  const meta = cropMeta[crop];
+  const grade = gradeLetters[document.getElementById('grade').value] || 'A';
+  document.getElementById('qtyLabel').textContent = qty.toLocaleString('en-IN');
+  document.getElementById('lotQty').textContent = qty.toLocaleString('en-IN') + ' kg';
+  document.getElementById('lotCropText').textContent = `${meta.label} · ${grade}`;
+  document.getElementById('lotIdText').textContent = `LOT-${meta.code}-2026-9842`;
+  document.getElementById('trackLotLine').textContent = `LOT-${meta.code}-2026-9842 · ${meta.label} · Grade ${grade} · Ramesh Sahoo`;
+  document.getElementById('lotStatusText').textContent = order ? `Order ${STATUS_LABEL[order.status] || ''}` : 'Verified & Ready for Bidding';
+  
+  // Create blank QR if no order exists
+  if(!order) {
+      document.getElementById("qrContainer").innerHTML = '<div style="font-size:30px;opacity:0.2;">QR</div>';
+  }
+
+  const slider = document.getElementById('qtySlider');
+  const pct = (qty - slider.min) / (slider.max - slider.min) * 100;
+  slider.style.setProperty('--fill', pct + '%');
+}
+
+function renderNRV(){
+  const qty = currentQty();
+  const gradeMult = currentGrade();
+  const rows = cropRates().map(m=>{
+    const rate = m.rate * gradeMult;
+    const revenue = rate * qty;
+    const freight = m.distance * 10;
+    const cess = revenue * m.cessPct/100;
+    const nrv = revenue - freight - cess;
+    return {...m, rate, revenue, freight, cess, nrv};
+  });
+  const sorted = [...rows].sort((a,b)=>b.nrv-a.nrv);
+  const best = sorted[0];
+
+  document.getElementById('optMandi').textContent = best.name;
+  document.getElementById('maxNRV').textContent = fmt(best.nrv);
+  document.getElementById('optFreight').textContent = '₹' + best.freight.toFixed(2);
+  const ovBest = document.getElementById('ovBestNRV');
+  if(ovBest) ovBest.textContent = fmt(best.nrv);
+
+  const body = document.getElementById('nrvBody');
+  const maxNrvVal = Math.max(...rows.map(r=>r.nrv));
+  body.innerHTML = rows.map(r=>{
+    const isBest = r.name === best.name;
+    const barPct = Math.max(6, Math.round((r.nrv / maxNrvVal) * 100));
+    return `<tr class="${isBest?'recommended':''}">
+      <td><span class="mandi-name">${r.name}</span>${isBest?'<span class="rec-badge">🏅 AI Pick</span>':''}</td>
+      <td>${r.distance.toFixed(1)} km</td>
+      <td>₹${r.rate.toFixed(2)}/kg</td>
+      <td>${fmt(r.revenue)}</td>
+      <td class="neg">₹${r.freight.toFixed(2)}</td>
+      <td class="neg">${r.cessPct.toFixed(1)}%<span class="cess-sub">(₹${Math.round(r.cess)})</span></td>
+      <td><div class="bar-cell"><span class="pos">${fmt(r.nrv)}</span></div><div class="bar-track" style="margin-top:5px;"><div class="bar-fill ${isBest?'best':''}" style="width:${barPct}%;"></div></div></td>
+      <td>${isBest ? '<button class="btn-select best">🏆 Select</button>' : '<button class="btn-select">Select</button>'}</td>
+    </tr>`;
+  }).join('');
+}
+
+// Fixed UI logic for Perishability
+function updateForecastUI() {
+    const crop = currentCrop();
+    const signalTitle = document.getElementById('aiSignalTitle');
+    const signalBox = document.getElementById('aiSignalBox');
+    const icon = document.getElementById('aiSignalIcon');
+    const dashText = document.getElementById('ovAiSignalText');
+
+    if(crop === 'tomato') {
+        signalTitle.textContent = "AI Signal: SELL NOW (Perishable)";
+        dashText.textContent = "SELL NOW";
+        signalBox.style.background = "linear-gradient(135deg, var(--amber-bg), #fdf2e0)";
+        signalBox.style.borderColor = "var(--amber)";
+        icon.textContent = "🛑";
+        icon.style.background = "var(--red)";
+    } else {
+        signalTitle.textContent = "AI Signal: HOLD & WAIT";
+        dashText.textContent = "Hold & Wait";
+        signalBox.style.background = "linear-gradient(135deg, var(--mint-50), var(--mint-100))";
+        signalBox.style.borderColor = "var(--mint-100)";
+        icon.textContent = "📈";
+        icon.style.background = "var(--green-700)";
+    }
+}
+
+// Match logic
+function matchScore(b, qty, maxRate){
+  const cropOk = true;
+  const qtyRatio = Math.min(1, b.required / qty);
+  const qtyOk = b.required >= qty;
+  const priceScore = (b.rate / maxRate) * 25;
+  const distScore = Math.max(0, (1 - b.distance/50)) * 20;
+  const score = 20 + (qtyOk?20:qtyRatio*20) + priceScore + distScore + 15;
+  return {score: Math.min(99, Math.round(score)), cropOk, qtyOk, priceGood: b.rate >= maxRate*0.9, nearby: b.distance <= 20};
+}
+
+function renderBuyers(){
+  const qty = currentQty();
+  const gradeMult = currentGrade();
+  const grid = document.getElementById('buyerGrid');
+  const buyers = cropBuyers();
+  const maxRate = Math.max(...buyers.map(b=>b.rate));
+  const list = buyers
+    .map((b,i)=>({...b, idx:i, m: matchScore(b, qty, maxRate)}))
+    .filter(b => currentFilter === 'All' || b.type === currentFilter)
+    .sort((a,b)=>b.m.score - a.m.score);
+
+  grid.innerHTML = list.map(b=>{
+    const total = b.rate * gradeMult * Math.min(qty, b.required);
+    const locked = order && order.buyerName === b.name;
+    const disabled = order ? 'disabled' : '';
+    const m = b.m;
+    return `<div class="buyer-card">
+      <div class="buyer-top">
+        <div><div class="buyer-name">${b.name}</div></div>
+        <div class="match-tag"><div class="num">${m.score}%</div><div class="lbl">Match</div></div>
+      </div>
+      <span class="type-tag">✔ ${b.type}</span>
+      <div class="buyer-facts">
+        <div class="fact"><div class="k">₹ Offered Rate</div><div class="v">₹${(b.rate*gradeMult).toFixed(0)}/kg</div></div>
+        <div class="fact"><div class="k">⚖ Required</div><div class="v">${b.required.toLocaleString('en-IN')} kg</div></div>
+        <div class="fact"><div class="k">📍 Distance</div><div class="v">${b.distance} km</div></div>
+      </div>
+      <div class="total-offer"><span class="k">Total offer value</span><span class="v">${fmt(total)}</span></div>
+      <button class="btn-accept ${locked?'locked':''}" data-idx="${b.idx}" ${disabled} onclick="acceptOffer(${b.idx})">${locked ? '🔒 Offer Locked' : '🔒 Accept Offer & Lock Price'}</button>
+    </div>`;
+  }).join('');
+}
+
+// ---------- 🚀 BACKEND API INTEGRATION: ORDER & ESCROW ----------
+
+async function acceptOffer(idx) {
+  const qty = currentQty();
+  const crop = currentCrop();
+  const b = cropBuyers()[idx];
+  
+  try {
+    const res = await fetch(`${API_URL}/api/orders`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "Authorization": `Bearer ${authToken}` },
+      body: JSON.stringify({
+        buyer_id: "B001",
+        crop: cropMeta[crop].label,
+        quantity_kg: qty,
+        agreed_rate: b.rate * currentGrade()
+      })
+    });
+    
+    if(!res.ok) throw new Error("Backend not running");
+    const data = await res.json();
+    
+    // Set local state
+    order = {
+      id: data.order_id,
+      lotId: `LOT-${cropMeta[crop].code}-2026-9842`,
+      crop: cropMeta[crop].label,
+      qty: qty,
+      rate: b.rate * currentGrade(),
+      total: (b.rate * currentGrade()) * qty,
+      buyerName: b.name,
+      status: 'OFFER_ACCEPTED',
+    };
+
+    // Generate Real QR Code
+    document.getElementById("qrContainer").innerHTML = ""; 
+    new QRCode(document.getElementById("qrContainer"), {
+      text: `agriconnect://order/${order.id}/verify`,
+      width: 54, height: 54, colorDark : "#0f2419", colorLight : "#ffffff", correctLevel : QRCode.CorrectLevel.L
+    });
+
+    toast(`Offer accepted. Order ${order.id} created & QR Generated.`);
+    renderAll();
+    goToTab('order');
+  } catch (err) {
+    toast("Failed to connect to backend", "error");
+  }
+}
+
+async function lockEscrow() {
+  if(!order) return;
+  try {
+      const res = await fetch(`${API_URL}/api/orders/${order.id}/lock-escrow`, {
+        method: "PATCH", headers: { "Authorization": `Bearer ${authToken}` }
+      });
+      if(res.ok) {
+        order.status = 'ESCROW_LOCKED';
+        toast(`₹${Math.round(order.total).toLocaleString('en-IN')} locked in escrow.`);
+        renderAll();
+      }
+  } catch(e) { toast("Backend offline", "error"); }
+}
+
+async function markInTransit() {
+  if(!order) return;
+  try {
+      const res = await fetch(`${API_URL}/api/orders/${order.id}/in-transit`, {
+        method: "PATCH", headers: { "Authorization": `Bearer ${authToken}` }
+      });
+      if(res.ok) {
+        order.status = 'IN_TRANSIT';
+        toast('Shipment in transit. Check terminal for delivery OTP.');
+        renderAll();
+      }
+  } catch(e) { toast("Backend offline", "error"); }
+}
+
+async function verifyOtp() {
+  const inputs = document.querySelectorAll('.otp-verify-row input');
+  const otpVal = Array.from(inputs).map(i=>i.value).join('');
+  const errEl = document.getElementById('otpError');
+
+  try {
+      const res = await fetch(`${API_URL}/api/orders/${order.id}/verify-delivery`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json", "Authorization": `Bearer ${authToken}` },
+        body: JSON.stringify({ delivery_otp: otpVal })
+      });
+
+      if(res.ok) {
+        errEl.classList.remove('show');
+        order.status = 'DELIVERY_VERIFIED';
+        toast('Delivery verified ✅');
+        renderAll();
+      } else {
+        errEl.textContent = 'Incorrect OTP. Check Python terminal.';
+        errEl.classList.add('show');
+        toast('Incorrect OTP', 'error');
+      }
+  } catch(e) { toast("Backend offline", "error"); }
+}
+
+async function releasePayment() {
+  if(!order) return;
+  try {
+      const res = await fetch(`${API_URL}/api/orders/${order.id}/release-payment`, {
+        method: "PATCH", headers: { "Authorization": `Bearer ${authToken}` }
+      });
+      if(res.ok) {
+        const data = await res.json();
+        order.status = 'PAYMENT_RELEASED';
+        order.nrv_payout = data.settlement.net_realizable_value_transferred;
+        toast('Payment released & split successfully.');
+        renderAll();
+      }
+  } catch(e) { toast("Backend offline", "error"); }
+}
+
+function renderOrder(){
+  const el = document.getElementById('orderCard');
+  if(!order){
+    el.innerHTML = `<div class="order-empty"><div class="ico">🔐</div><div style="font-weight:700;">No active order yet</div></div>`;
+    return;
+  }
+  const stepIdx = STATUS_TO_STEP[order.status];
+  const stepper = STEP_LABELS.map((label,i)=>`<div class="step-chip ${i<stepIdx?'done':(i===stepIdx?'current':'')}">${i<stepIdx?'✓ ':''}${label}</div>`).join('');
+  const color = STATUS_COLOR[order.status];
+
+  let actionHtml = '';
+  if(order.status === 'OFFER_ACCEPTED'){
+    actionHtml = `<button class="btn-primary" onclick="lockEscrow()">🔐 Lock Escrow (${fmt(order.total)})</button>`;
+  } else if(order.status === 'ESCROW_LOCKED'){
+    actionHtml = `<button class="btn-primary" onclick="markInTransit()">🚚 Mark Shipment In Transit</button>`;
+  } else if(order.status === 'IN_TRANSIT'){
+    actionHtml = `<div style="font-size:12.5px;font-weight:600;margin-bottom:4px;">Enter delivery OTP from Backend Terminal</div>
+      <div class="otp-verify-row"><input maxlength="1"><input maxlength="1"><input maxlength="1"><input maxlength="1"><input maxlength="1"><input maxlength="1"></div>
+      <div class="otp-error" id="otpError"></div>
+      <button class="btn-primary" onclick="verifyOtp()">✅ Verify Delivery</button>`;
+  } else if(order.status === 'DELIVERY_VERIFIED'){
+    actionHtml = `<button class="btn-primary" onclick="releasePayment()">💰 Release Payment Split</button>`;
+  } else if(order.status === 'PAYMENT_RELEASED'){
+    actionHtml = `<div class="success-block">
+        <div style="font-size:34px;">🎉</div>
+        <div class="big">${fmt(order.nrv_payout)} Net Transferred</div>
+        <div class="note">Freight and APMC cess were deducted automatically.</div>
+        <button class="btn-link" style="margin-top:14px;" onclick="order=null;renderAll();goToTab('buyers');">Start a new order →</button>
+      </div>`;
+  }
+
+  el.innerHTML = `
+    <div class="order-head-row">
+      <div><div class="card-title">Order ${order.id}</div><div style="font-size:12px;">Crop Lot ${order.lotId}</div></div>
+      <span class="status-badge" style="background:${color.bg};color:${color.fg};">${STATUS_LABEL[order.status]}</span>
+    </div>
+    <div class="order-facts">
+      <div class="order-fact"><div class="k">Total Amount</div><div class="v">${fmt(order.total)}</div></div>
+      <div class="order-fact"><div class="k">Buyer</div><div class="v">${order.buyerName}</div></div>
+    </div>
+    <div class="stepper">${stepper}</div>
+    ${order.status === 'PAYMENT_RELEASED' ? actionHtml : `<div>${actionHtml}</div>`}
+  `;
+
+  el.querySelectorAll('.otp-verify-row input').forEach((inp,i,arr)=>{
+    inp.addEventListener('input', ()=>{ if(inp.value && arr[i+1]) arr[i+1].focus(); });
+  });
+}
+
+function renderTimeline(){
+  const body = document.getElementById('timelineBody');
+  const steps = ['Harvested','Quality Graded','Digital Lot Created','Listed','Buyer Matched','Offer Accepted','Escrow Locked','In Transit','Delivered','Payment Released'];
+  let doneIdx = order ? STATUS_TO_STEP[order.status] + 5 : 4;
+  let currIdx = order && order.status === 'PAYMENT_RELEASED' ? -1 : (order ? doneIdx + 1 : 5);
+  
+  body.innerHTML = steps.map((label,i)=>{
+    const done = i <= doneIdx;
+    const current = i === currIdx;
+    const cls = current ? 'current' : (done ? '' : 'pending');
+    return `<div class="tl-item ${cls}">
+      <div class="tl-dot-wrap"><div class="tl-dot">${done?'✓':(current?'●':'●')}</div>${i<steps.length-1?'<div class="tl-line"></div>':''}</div>
+      <div class="tl-body"><div class="tl-title">${label}</div></div>
+    </div>`;
+  }).join('');
+}
+
+function renderAll(){
+  renderSidebar();
+  renderNRV();
+  renderBuyers();
+  renderOrder();
+  renderTimeline();
+  updateForecastUI();
+}
+
+document.getElementById('qtySlider').addEventListener('input', renderAll);
+document.getElementById('grade').addEventListener('change', renderAll);
+document.getElementById('crop').addEventListener('change', renderAll);
+
+document.querySelectorAll('.tab-btn').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+    document.querySelectorAll('.tab-view').forEach(v=>v.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('tab-'+btn.dataset.tab).classList.add('active');
+  });
+});
+
+document.querySelectorAll('.pill').forEach(p=>{
+  p.addEventListener('click', ()=>{
+    document.querySelectorAll('.pill').forEach(x=>x.classList.remove('active'));
+    p.classList.add('active');
+    currentFilter = p.dataset.filter;
+    renderBuyers();
+  });
+});
+
+// ---------- AI Chat ----------
+document.getElementById('chatSend').addEventListener('click', async () => {
+    const input = document.getElementById('chatInput');
+    const val = input.value.trim();
+    if(!val) return;
+    
+    // Add User Message
+    const chatBody = document.getElementById('chatBody');
+    chatBody.innerHTML += `<div class="msg-row user"><div class="msg-avatar">R</div><div class="msg-bubble">${val}</div></div>`;
+    input.value = '';
+    chatBody.scrollTop = chatBody.scrollHeight;
+
+    // Send to Backend
+    try {
+        const res = await fetch(`${API_URL}/api/chat`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json", "Authorization": `Bearer ${authToken}` },
+            body: JSON.stringify({ message: val })
+        });
+        const data = await res.json();
+        chatBody.innerHTML += `<div class="msg-row bot"><div class="msg-avatar">AI</div><div class="msg-bubble">${data.reply}</div></div>`;
+        chatBody.scrollTop = chatBody.scrollHeight;
+    } catch(e) {
+        chatBody.innerHTML += `<div class="msg-row bot"><div class="msg-avatar">AI</div><div class="msg-bubble">Sorry, the backend is not running.</div></div>`;
+    }
+});
+
+function goToTab(tabName){
+  const btn = document.querySelector(`.tab-btn[data-tab="${tabName}"]`);
+  if(btn) btn.click();
+}
+document.querySelectorAll('.qa-btn').forEach(b=>b.addEventListener('click', ()=> goToTab(b.dataset.goto)));
+
+// ---------- BACKEND LOGIN FLOW ----------
+const loginScreen = document.getElementById('loginScreen');
+const appScreen = document.getElementById('appScreen');
+const otpBlock = document.getElementById('otpBlock');
+const sendOtpBtn = document.getElementById('sendOtpBtn');
+
+sendOtpBtn.addEventListener('click', async () => {
+  const phoneVal = document.getElementById('loginPhone').value.replace(/\s/g, ''); 
+  
+  if (otpBlock.classList.contains('hidden')) {
+    // 1. Request OTP from backend
+    try {
+        await fetch(`${API_URL}/api/auth/send-otp`, {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ mobile: phoneVal })
+        });
+        
+        otpBlock.classList.remove('hidden');
+        document.getElementById('skipLoginBtn').classList.remove('hidden');
+        sendOtpBtn.textContent = 'Verify & Log In';
+        toast("OTP sent! Check your Python terminal.", "success");
+    } catch(e) { toast("Backend offline! Use Bypass.", "error"); document.getElementById('skipLoginBtn').classList.remove('hidden'); }
+  } else {
+    // 2. Verify OTP with backend
+    const inputs = document.querySelectorAll('.otp-row input');
+    const otpVal = Array.from(inputs).map(i=>i.value).join('');
+    
+    try {
+        const res = await fetch(`${API_URL}/api/auth/verify-otp`, {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ mobile: phoneVal, otp: otpVal })
+        });
+        
+        if (res.ok) {
+          const data = await res.json();
+          authToken = data.access_token;
+          loginScreen.classList.add('hidden');
+          appScreen.classList.remove('hidden');
+          renderAll();
+        } else { toast("Invalid OTP", "error"); }
+    } catch(e) { toast("Backend offline", "error"); }
+  }
+});
+document.getElementById('skipLoginBtn').addEventListener('click', ()=>{
+    loginScreen.classList.add('hidden');
+    appScreen.classList.remove('hidden');
+    renderAll();
+});
+
+</script>
+</body>
+</html>
